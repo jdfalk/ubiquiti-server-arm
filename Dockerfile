@@ -1,4 +1,4 @@
-FROM arm64v8/openjdk:11-jre
+FROM arm64v8/ubuntu:bionic
 
 # set version label
 ARG BUILD_DATE
@@ -11,7 +11,14 @@ ARG DEBIAN_FRONTEND="noninteractive"
 RUN \
     echo "**** install packages ****" && \
     apt-get update && \
-    apt-get -y install binutils pcregrep mongodb-server openjdk-8-jre-headless jsvc && \
-    curl -o /root/unify.deb -L https://dl.ui.com/unifi/5.12.22/unifi_sysvinit_all.deb && \
-    dpkg -i /root/unify.deb && \
-    apt-get clean -y
+    apt-get -y install \
+    binutils \
+    jsvc \
+    libcap2 \
+    mongodb-server \
+    openjdk-8-jre-headless \
+    pcregrep && \
+    apt-get clean -y && \
+    cd /root && \
+    wget https://dl.ui.com/unifi/5.12.22/unifi_sysvinit_all.deb && \
+    dpkg -i /root/unifi_sysvinit_all.deb
